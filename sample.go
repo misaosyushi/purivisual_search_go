@@ -87,5 +87,8 @@ func getSpotify(accessToken string)  {
 	}
 	result := data.Artists.Items[0].ExternalUrls.Spotify
 	fmt.Println(result)
+
+	sample := "SORA hogehoge"
+	fmt.Println(strings.TrimLeft(sample, "SORA "))
 }
 
