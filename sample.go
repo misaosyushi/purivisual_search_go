@@ -53,7 +53,7 @@ func postSpotify() {
 }
 
 func getSpotify(accessToken string)  {
-	keyword := "dezert"
+	keyword := url.PathEscape("アルルカン")
 
 	url := "https://api.spotify.com/v1/search?q=" + keyword + "&type=artist&market=JP&limit=1&offset=0"
 
@@ -66,4 +66,26 @@ func getSpotify(accessToken string)  {
 
 	byteArray, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println(string(byteArray))
+
+	type Item struct {
+		ExternalUrls struct {
+			Spotify string `json:"spotify"`
+		} `json:"external_urls"`
+	}
+	type SearchResults struct {
+		Artists struct{
+			Items []Item `json:"items"`
+		}
+	}
+
+	jsonBytes := ([]byte)(byteArray)
+	data := new(SearchResults)
+
+	if err := json.Unmarshal(jsonBytes, data); err != nil {
+		fmt.Println("JSON Unmarshal error:", err)
+		return
+	}
+	result := data.Artists.Items[0].ExternalUrls.Spotify
+	fmt.Println(result)
 }
+
